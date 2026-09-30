@@ -9,6 +9,30 @@ const setKey = k => { try { k ? localStorage.setItem(KEY_STORAGE, k) : localStor
 let rows = []
 let sleepSpots = CONFIG.SLEEP_SPOTS
 
+// ---------- Telegram Mini App ----------
+// Telegram передаёт подписанные данные пользователя в #tgWebAppData — по ним скрипт пускает без пароля
+const TG_STORAGE = 'dr22_tg_init'
+const tgInit = (() => {
+  const fromHash = new URLSearchParams(location.hash.slice(1)).get('tgWebAppData')
+  try {
+    if (fromHash) sessionStorage.setItem(TG_STORAGE, fromHash)
+    return fromHash || sessionStorage.getItem(TG_STORAGE) || ''
+  } catch { return fromHash || '' }
+})()
+if (tgInit) {
+  document.documentElement.classList.add('in-tg')
+  const s = document.createElement('script')
+  s.src = 'https://telegram.org/js/telegram-web-app.js'
+  s.onload = () => {
+    const tg = window.Telegram?.WebApp
+    if (!tg) return
+    tg.ready()
+    tg.expand()
+    try { tg.setHeaderColor('#0c0c0c'); tg.setBackgroundColor('#0c0c0c') } catch {}
+  }
+  document.head.appendChild(s)
+}
+
 // ---------- Загрузка ----------
 async function load() {
   const demo = !CONFIG.API_URL
@@ -16,17 +40,22 @@ async function load() {
   if (demo) { rows = demoRows(); return show() }
 
   const key = getKey()
-  if (!key) return showLogin()
+  if (!tgInit && !key) return showLogin()
 
   $('#status').hidden = false
   $('#status').textContent = 'Загружаю ответы…'
   $('#refresh').disabled = true
   try {
-    const res = await fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'list', key }) })
+    const res = await fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(tgInit ? { action: 'list', tg_init: tgInit } : { action: 'list', key }) })
     const json = await res.json()
     if (json.error === 'wrong_key') { setKey(''); return showLogin('Неверный пароль') }
+    if (json.error === 'tg_denied') {
+      $('#status').textContent = 'Эта админка только для Санечки 🙂'
+      return
+    }
     if (!json.ok) throw new Error(json.error)
     rows = json.rows
+    if (json.sheet_url) { $('#sheetLink').href = json.sheet_url; $('#sheetLink').hidden = false }
     sleepSpots = json.sleep_spots ?? sleepSpots
     show()
   } catch (err) {
@@ -55,6 +84,10 @@ $('#login').addEventListener('submit', e => {
   load()
 })
 $('#refresh').addEventListener('click', load)
+$('#sheetLink').addEventListener('click', e => {
+  const tg = window.Telegram?.WebApp
+  if (tg?.openLink) { e.preventDefault(); tg.openLink(e.currentTarget.href) }
+})
 $('#logout').addEventListener('click', () => { setKey(''); showLogin() })
 
 // ---------- Отрисовка ----------
@@ -63,6 +96,7 @@ function show() {
   $('#login').hidden = true
   $('#dash').hidden = false
   $('#actions').hidden = false
+  $('#logout').hidden = !!tgInit
   rows.sort((a, b) => String(a.name).localeCompare(String(b.name), 'ru'))
   renderTiles()
   renderAllergies()

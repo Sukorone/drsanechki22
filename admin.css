@@ -5,6 +5,7 @@
 .adm-actions { display: flex; gap: 10px; }
 .mini { padding: 10px 14px; border: 2px solid var(--lime); background: var(--lime); color: var(--bg); font: 700 13px var(--mono); cursor: pointer; }
 .mini.ghost { background: transparent; color: var(--lime); }
+a.mini { text-decoration: none; display: inline-block; }
 .mini:disabled { opacity: .5; cursor: wait; }
 .demo { background: var(--orange); color: var(--bg); font-weight: 700; font-size: 12px; padding: 8px 12px; margin-bottom: 20px; }
 .status { color: var(--muted); padding: 30px 0; }
@@ -80,3 +81,8 @@
 .card dd { word-break: break-word; }
 .card .warn { color: var(--orange); font-weight: 700; }
 .card-foot { margin-top: 10px; font-size: 11px; color: #666; }
+
+/* внутри Telegram: без бегущей строки, компактнее шапка */
+.in-tg .marquee { display: none; }
+.in-tg .adm { padding-top: 16px; }
+.in-tg .adm h1 { font-size: 40px; }
