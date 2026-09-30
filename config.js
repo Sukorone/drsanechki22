@@ -1,7 +1,7 @@
 // Общие настройки сайта и админки
 window.CONFIG = {
   // Ссылка на веб-приложение Google Apps Script (…/exec). Пока пусто — сайт в демо-режиме.
-  API_URL: 'https://script.google.com/macros/s/AKfycbz-7StMUUkI5GkhtYk8YW_TMbUmhuSNSXqPDUDHa2uCx6X-872cvWfg-sP8YaGMS09u/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbwcC6Bq-e5huLd36QWlpheHPybFe2SJ5vWXsiHLNzZ_lR8uIjuZpdfQVSfnHs1xf2ym/exec',
   PARTY_DATE: '2026-10-10T17:00:00+03:00',
   SLEEP_SPOTS: 3,
   BANK_NOW: 100000,
