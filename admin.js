@@ -46,13 +46,10 @@ async function load() {
   $('#status').textContent = 'Загружаю ответы…'
   $('#refresh').disabled = true
   try {
-    const res = await fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(tgInit ? { action: 'list', tg_init: tgInit } : { action: 'list', key }) })
+    const res = await fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'list', tg_init: tgInit || undefined, key: key || undefined }) })
     const json = await res.json()
     if (json.error === 'wrong_key') { setKey(''); return showLogin('Неверный пароль') }
-    if (json.error === 'tg_denied') {
-      $('#status').textContent = 'Эта админка только для Санечки 🙂'
-      return
-    }
+    if (json.error === 'tg_denied') return showLogin('Telegram не пустил — введи пароль')
     if (!json.ok) throw new Error(json.error)
     rows = json.rows
     if (json.sheet_url) { $('#sheetLink').href = json.sheet_url; $('#sheetLink').hidden = false }
