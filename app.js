@@ -113,8 +113,9 @@ $('#sleepover').addEventListener('change', renderSpots)
 async function loadSpots() {
   if (!CONFIG.API_URL) return
   try {
-    const id = loadSaved()?.client_id || ''
-    const res = await fetch(`${CONFIG.API_URL}?action=spots&client_id=${encodeURIComponent(id)}`)
+    // свой id передаём, только если он есть: пустой совпал бы со строками, вписанными в таблицу вручную
+    const id = loadSaved()?.client_id
+    const res = await fetch(`${CONFIG.API_URL}?action=spots${id ? '&client_id=' + encodeURIComponent(id) : ''}`)
     const json = await res.json()
     if (json.ok) { spotsLeft = json.left; renderSpots() }
   } catch (err) { console.warn('Не удалось узнать свободные места', err) }
