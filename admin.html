@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Админка · ДР Санечки</title>
+  <meta name="theme-color" content="#0c0c0c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>АДМИНКА ✶ ДР САНЕЧКИ ✶ 10.10 ✶ ТОЛЬКО ДЛЯ СВОИХ ✶&nbsp;</span>
+    <span>АДМИНКА ✶ ДР САНЕЧКИ ✶ 10.10 ✶ ТОЛЬКО ДЛЯ СВОИХ ✶&nbsp;</span>
+  </div>
+</div>
+
+<main class="adm">
+  <header class="adm-head">
+    <div>
+      <p class="num">админка</p>
+      <h1>Кто<br>придёт</h1>
+    </div>
+    <div class="adm-actions" id="actions" hidden>
+      <button class="mini" id="refresh" type="button">↻ Обновить</button>
+      <button class="mini ghost" id="logout" type="button">Выйти</button>
+    </div>
+  </header>
+
+  <p class="demo" id="demo" hidden>ДЕМО-ДАННЫЕ · таблица ещё не подключена (API_URL в config.js пустой)</p>
+
+  <!-- вход -->
+  <form class="login" id="login" hidden>
+    <label class="q" for="key">Пароль</label>
+    <input class="input" id="key" type="password" autocomplete="current-password" required>
+    <p class="error" id="loginError" hidden></p>
+    <button class="btn" type="submit">Войти →</button>
+  </form>
+
+  <p class="status" id="status" hidden></p>
+
+  <div id="dash" hidden>
+    <section class="tiles" id="tiles"></section>
+
+    <div class="grid">
+      <section class="panel alert" id="allergyPanel">
+        <h2>⚠ Аллергии и ограничения</h2>
+        <div id="allergies"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Алкоголь</h2>
+        <p class="sub">Сколько гостей выбрали. Нажми на строку — увидишь кто.</p>
+        <div id="drinks"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Еда</h2>
+        <div id="food"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Кто когда</h2>
+        <div id="arrival"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Уровень тусовки</h2>
+        <p class="sub" id="levelAvg"></p>
+        <div class="hist" id="levels"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Плейлист</h2>
+        <ol class="plain" id="tracks"></ol>
+      </section>
+
+      <section class="panel wide">
+        <h2>Пишут Санечке</h2>
+        <div id="messages"></div>
+      </section>
+    </div>
+
+    <section class="guests">
+      <h2>Гости</h2>
+      <div class="filters">
+        <div class="chips" id="filters">
+          <label><input type="radio" name="f" value="all" checked><span>Все</span></label>
+          <label><input type="radio" name="f" value="yes"><span>Идут</span></label>
+          <label><input type="radio" name="f" value="no"><span>Не идут</span></label>
+          <label><input type="radio" name="f" value="sleep"><span>Ночуют</span></label>
+        </div>
+        <input class="input search" id="search" type="search" placeholder="Поиск по имени">
+      </div>
+      <div class="cards" id="cards"></div>
+    </section>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
